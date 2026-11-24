@@ -1,0 +1,5 @@
+streamlit>=1.40,<2
+pydantic>=2.6,<3
+openai>=1.40,<3
+PyYAML>=6.0,<7
+pytest>=8.0,<9
