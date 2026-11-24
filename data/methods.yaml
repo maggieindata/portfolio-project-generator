@@ -1,0 +1,62 @@
+# One method per session. The generator does not mix methods.
+
+methods:
+  - id: inventory_first
+    label: Inventory-First
+    summary: Audit school, bootcamp, or Kaggle work for skills you can already show, the business context it lacks, and the effort to upgrade it for this role.
+    inputs:
+      - id: existing_work
+        label: Existing school, bootcamp, or Kaggle work
+        type: text_area
+        placeholder: What you built, what data it used, and how far it got.
+      - id: skills_shown
+        label: Skills that work already shows
+        type: text
+        placeholder: SQL, a dashboard, a classification model
+      - id: upgrade_gap
+        label: What you would need to add for this role
+        type: text_area
+        placeholder: A stakeholder, a decision, a baseline, a tougher dataset.
+
+  - id: skill_first
+    label: Skill-First
+    summary: Start from a target job description, pull the must-have skills, and design a project that shows them.
+    inputs:
+      - id: job_description
+        label: Target job description
+        type: text_area
+        placeholder: Paste the responsibilities and requirements, not the whole posting if it is huge.
+      - id: skills_to_prove
+        label: Skills you most need to prove
+        type: text
+        placeholder: experimentation, SQL, stakeholder communication
+
+  - id: problem_first
+    label: Problem-First
+    summary: Start with a real industry problem, or a personal problem with real stakes, that this role would own.
+    inputs:
+      - id: problem
+        label: The problem
+        type: text_area
+        placeholder: What is going wrong, and where?
+      - id: who_and_stakes
+        label: Who cares, and what it costs them
+        type: text_area
+        placeholder: Name a person or team and the cost, risk, or missed decision.
+      - id: industry
+        label: Industry
+        type: text
+        placeholder: Marketplaces, hospitals, city operations
+
+  - id: data_first
+    label: Data-First
+    summary: Start from a dataset on the shortlist, then test whether it can carry a full SPIDER story for this role.
+    inputs:
+      - id: dataset_hint
+        label: Dataset you want to start from
+        type: text
+        placeholder: NYC TLC, Olist, CFPB, or another shortlist name
+      - id: why_interesting
+        label: Why it is interesting
+        type: text_area
+        placeholder: The question you hope it can answer.
