@@ -1,0 +1,252 @@
+# Hiring-manager rubric. Edit tokens to tune scoring without changing Python.
+# A group scores as a hit when any token in it matches. Ready needs ready_min_groups
+# and ready_min_chars. A "*" token matches a word stem (cost* matches costs).
+
+criteria:
+  - id: industry_relevance
+    name: Industry relevance
+    short: Relevance
+    fields: [summary_impact, problem_space, act1]
+    weak_below_chars: 80
+    ready_min_chars: 140
+    ready_min_groups: 2
+    groups:
+      - [stakeholder*, lead, team]
+      - [cost*, trust, harm, revenue, retention, payment*, reliability, risk, waste*, budget, stakes]
+      - [decision*, recommend*]
+    levels:
+      weak: Generic or purely academic
+      developing: Plausible domain, fuzzy stakeholder
+      ready: Named industry, user, and stakes
+    evidence:
+      ready: Names who cares and what is at stake.
+      developing: Some domain context, but the stakeholder or the stakes are still fuzzy.
+      weak: Reads as generic or academic, without a named stakeholder and stakes.
+
+  - id: depth_of_analysis
+    name: Depth of analysis
+    short: Depth
+    fields: [investigation_insights, execution, act2]
+    weak_below_chars: 80
+    ready_min_chars: 140
+    ready_min_groups: 2
+    groups:
+      - [because, driver*, explai*]
+      - [alternative*, confound*, "rather than"]
+      - [pattern*, segment*, cohort*, zone*, theme*]
+    levels:
+      weak: Describes charts only
+      developing: Notes patterns, thin on why
+      ready: Explains drivers and alternative causes
+    evidence:
+      ready: Explains a driver and at least one alternative cause.
+      developing: Notes a pattern, with a thin account of why.
+      weak: Describes charts or steps without a why.
+
+  - id: thought_process
+    name: Thought process & reasoning
+    short: Thought
+    fields: [execution, investigation_insights, act2]
+    weak_below_chars: 80
+    ready_min_chars: 140
+    ready_min_groups: 2
+    groups:
+      - [compar*, tried, tested]
+      - [dropped, "did not work", failed]
+      - [chose, choice, decided]
+    levels:
+      weak: Shows only the final method
+      developing: Mentions a choice, no rationale
+      ready: Shows decisions and what did not work
+    evidence:
+      ready: Shows a comparison, what gets dropped, and the choice.
+      developing: Mentions a method choice without saying what lost.
+      weak: Shows only the final method.
+
+  - id: interview_defense
+    name: Ability to defend in interviews
+    short: Defense
+    fields: [execution, results_recommendations, act3, investigation_insights]
+    weak_below_chars: 80
+    ready_min_chars: 140
+    ready_min_groups: 2
+    groups:
+      - [assumption*]
+      - [trade-off, tradeoff, versus]
+      - [limitation*, caveat*, "if that assumption is wrong"]
+    levels:
+      weak: Cannot explain choices
+      developing: Can narrate the steps
+      ready: Can defend assumptions and trade-offs
+    evidence:
+      ready: States an assumption, a trade-off, and a limit someone could push on.
+      developing: Narrates the plan, with little to defend if challenged.
+      weak: There is nothing here an interviewer could push on.
+
+  - id: tradeoffs
+    name: Understanding trade-offs
+    short: Trade-offs
+    fields: [execution, results_recommendations]
+    weak_below_chars: 80
+    ready_min_chars: 140
+    ready_min_groups: 2
+    groups:
+      - [simple, baseline*, heuristic*]
+      - [heavier, complex, model*]
+      - [trade-off, tradeoff, "speed versus accuracy", precision, recall]
+    levels:
+      weak: Defaults to complex or to the first idea
+      developing: Names a trade-off
+      ready: Chooses with speed vs accuracy, simple vs complex
+    evidence:
+      ready: Chooses between a simple baseline and a heavier method.
+      developing: Names a trade-off without a decision rule.
+      weak: Defaults to the first method, or to complexity, with no alternative.
+
+  - id: independence
+    name: Independent work capability
+    short: Independence
+    fields: [execution, summary_impact, investigation_insights]
+    weak_below_chars: 80
+    ready_min_chars: 140
+    ready_min_groups: 2
+    groups:
+      - ["i will", "my own"]
+      - ["not a tutorial", original*]
+      - [dropped, "instead of", iteration]
+    levels:
+      weak: Tutorial-shaped end to end
+      developing: Some original steps
+      ready: Clear owner decisions throughout
+    evidence:
+      ready: The plan records an owner decision and what gets dropped.
+      developing: Some original steps, still close to a walkthrough.
+      weak: Reads as a tutorial followed end to end.
+
+  - id: ambiguity
+    name: Handling ambiguity
+    short: Ambiguity
+    fields: [results_recommendations, data, act3]
+    weak_below_chars: 80
+    ready_min_chars: 140
+    ready_min_groups: 2
+    groups:
+      - [assumption*]
+      - [uncertain*, "if that assumption is wrong", "may not"]
+      - [limitation*, caveat*]
+    levels:
+      weak: Assumptions are hidden
+      developing: Lists assumptions, no limits
+      ready: States assumptions, uncertainty, and impact
+    evidence:
+      ready: States an assumption, the uncertainty, and what the limit changes.
+      developing: Mentions a limit without saying what it does to the decision.
+      weak: Assumptions are hidden.
+
+  - id: implementation
+    name: Implementation & planning
+    short: Implementation
+    fields: [results_recommendations, execution, data]
+    weak_below_chars: 80
+    ready_min_chars: 120
+    ready_min_groups: 2
+    groups:
+      - [readout, refresh*, monitor*]
+      - ["next step", reproduc*, document*]
+      - [pipeline*, threshold*, production]
+    levels:
+      weak: Notebook only
+      developing: Mentions vague next steps
+      ready: Notes docs, scale, or production limits
+    evidence:
+      ready: Names a next step, a readout or refresh, and how someone would reproduce it.
+      developing: Mentions a next step without a way to rerun or monitor it.
+      weak: Stops at the notebook, with no plan.
+
+spider_fields:
+  - id: summary_impact
+    letter: S
+    name: Summary Impact
+    include: "3–5 sentence elevator pitch: context, action, data, method, results."
+  - id: problem_space
+    letter: P
+    name: Problem Space
+    include: "Business context: why it matters, who cares, and the stakes."
+  - id: investigation_insights
+    letter: I
+    name: Investigation & Insights
+    include: "Questions pursued, patterns found, and the why behind them."
+  - id: data
+    letter: D
+    name: Data
+    include: "Sourcing, cleaning, and handling decisions."
+  - id: execution
+    letter: E
+    name: Execution / Methodology
+    include: "Strategic technical decisions, what was tried, and what was dropped."
+  - id: results_recommendations
+    letter: R
+    name: Results & Recommendations
+    include: "Conclusions, what to do next, and what would change with more resources."
+
+acts:
+  - id: act1
+    letter: Act 1
+    name: Problem + Stakes
+    include: Maps mainly to the problem, and is previewed in the summary.
+  - id: act2
+    letter: Act 2
+    name: Analysis Journey
+    include: What was tried, which methods, and what did not work.
+  - id: act3
+    letter: Act 3
+    name: Findings + Action
+    include: What we learned and what to do.
+
+pitfalls:
+  visualization_only:
+    label: Visualization-only
+    min_viz: 1
+    viz_tokens: [chart*, heatmap*, dashboard*, plot*, visuali*, graph*, eda]
+    substance_tokens: [because, driver*, recommend*, "next step", stakeholder*, baseline*, trade-off, tradeoff, decision*]
+  overused:
+    label: Overused dataset, no new angle
+    new_angle_phrases:
+      - new angle
+      - genuinely new
+      - unlike the tutorial
+      - fresh question
+      - beyond the tutorial
+      - original question
+    datasets:
+      - pattern: '\btitanic\b'
+        label: Titanic
+      - pattern: '\biris\b'
+        label: Iris
+      - pattern: 'boston housing'
+        label: Boston Housing
+      - pattern: 'boston house'
+        label: Boston Housing
+      - pattern: 'ibm telco'
+        label: IBM Telco customer churn
+      - pattern: 'telco customer churn'
+        label: IBM Telco customer churn
+      - pattern: 'credit card fraud'
+        label: credit-card fraud tutorial sets
+      - pattern: 'credit-card fraud'
+        label: credit-card fraud tutorial sets
+  no_business_context:
+    label: No business context
+    who_tokens: [stakeholder*, lead, team, customer*, patient*, rider*, ops]
+    why_tokens: [cost*, trust, harm, revenue, retention, payment*, reliability, risk, waste*, budget, stakes]
+  tutorial_clone:
+    label: Tutorial clone
+    clone_tokens: ["tutorial clone", "kaggle kernel", follow-along, "follow along", "copied the tutorial", cookie-cutter]
+    originality_tokens: [dropped, "did not work", "my own", "not a tutorial", "instead of", "i decided", iteration]
+
+dataset_checks:
+  story:
+    min_chars: 60
+    act1_tokens: [cost*, trust, harm, revenue, retention, payment*, reliability, risk, waste*, budget, stakes, stakeholder*]
+    act2_tokens: [compar*, baseline*, heavier, drop*, tried]
+    act3_tokens: [action, recommend*, next, should, list, threshold*]

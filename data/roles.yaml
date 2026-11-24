@@ -1,0 +1,124 @@
+# Three v1 roles. Weights are a starting rubric and sum to 100.
+# Priority criteria are emphasized in the scorecard. They do not change the pass bar.
+
+roles:
+  - id: data_analyst
+    label: Data Analyst
+    voice: analyst
+    good_looks_like: A stakeholder-ready analysis with a clear decision, not a model showcase.
+    priority_criteria:
+      - industry_relevance
+      - depth_of_analysis
+      - thought_process
+      - implementation
+    weights:
+      industry_relevance: 15
+      depth_of_analysis: 20
+      thought_process: 15
+      interview_defense: 10
+      tradeoffs: 10
+      independence: 10
+      ambiguity: 10
+      implementation: 10
+    emphasized_skills:
+      - SQL
+      - pandas
+      - stakeholder recommendations
+      - exploratory analysis
+    showcase_keywords: [sql, pandas, stakeholder*, join*, benchmark*]
+    defaults:
+      stakeholder: a stakeholder who owns the operational decision
+      stakes_sentence: The cost of guessing is wasted budget and a decision nobody can defend.
+      question: which slice of this data changes a real decision
+      alternatives: a mix shift, a calendar effect, and a filter that changes who appears in the extract
+      baseline: a simple baseline the stakeholder can recompute
+      heavier: a heavier cut only if it changes who they act on
+      drop_rule: drop the heavier cut if it does not change the decision versus the baseline
+      assumption: the public extract is a fair proxy for the operational decision, and I will say where it is not
+      limitation: public data omits operational fields a team would have internally
+      action: a short decision list the stakeholder can use next
+      more_resources: add one missing operational field and rerun the comparison
+      sample_plan: an extract I will count and keep inside the working range
+      cleaning: document grain, missing values, joins, and any filter that changes who is in the extract
+      skills_sentence: SQL or pandas, a clear comparison, and a stakeholder recommendation
+
+  - id: product_data_scientist
+    label: Product Data Scientist
+    voice: product
+    good_looks_like: A product or experiment decision, with causal or metric reasoning a PM could use.
+    priority_criteria:
+      - industry_relevance
+      - thought_process
+      - tradeoffs
+      - interview_defense
+      - ambiguity
+    weights:
+      industry_relevance: 15
+      depth_of_analysis: 15
+      thought_process: 15
+      interview_defense: 15
+      tradeoffs: 15
+      independence: 10
+      ambiguity: 10
+      implementation: 5
+    emphasized_skills:
+      - experimentation
+      - product metrics
+      - causal inference
+      - stakeholder recommendations
+    showcase_keywords: [experiment*, causal, metric*, cohort*, uplift, retention, propensity]
+    defaults:
+      stakeholder: a product or growth lead who has to ship, stop, or retarget
+      stakes_sentence: The cost of a wrong call is wasted spend or killing something that actually works.
+      question: whether the treatment or the program should continue, and for whom
+      alternatives: a mix shift, users who would have converted anyway, and a segment the average hides
+      baseline: a simple rate or cohort baseline a PM can recompute
+      heavier: a model only if it changes the ship, stop, or target decision
+      drop_rule: drop the model if it does not change the decision versus the baseline
+      assumption: the metric in the public extract is a fair proxy for the product decision, and I will say where it is not
+      limitation: public data rarely includes margin, exposure, or the full experiment log
+      action: a ship, stop, or target recommendation with the unaffected group named
+      more_resources: run the follow-up experiment and add one metric the public extract lacks
+      sample_plan: an extract I will count and keep inside the working range
+      cleaning: document the metric definition, the unit of randomization or the cohort grain, and leakage from the future
+      skills_sentence: experimentation, product metrics, and a causal or cohort comparison
+
+  - id: algorithm_data_scientist
+    label: Algorithm Data Scientist
+    voice: algorithm
+    good_looks_like: A defended method, baselines, and trade-offs, tied to a real decision or system.
+    priority_criteria:
+      - tradeoffs
+      - thought_process
+      - implementation
+      - interview_defense
+    weights:
+      industry_relevance: 10
+      depth_of_analysis: 10
+      thought_process: 15
+      interview_defense: 10
+      tradeoffs: 20
+      independence: 10
+      ambiguity: 10
+      implementation: 15
+    emphasized_skills:
+      - baselines
+      - precision and recall
+      - error analysis
+      - evaluation design
+    showcase_keywords: [baseline*, precision, recall, classif*, "error analysis", anomaly, "tf-idf", evaluation]
+    defaults:
+      stakeholder: a review lead who has to act on the model's queue
+      stakes_sentence: A missed case has a real cost, and a noisy model wastes the reviewer's time.
+      question: whether a heavier method beats a baseline at the threshold the team can actually review
+      alternatives: a seasonal spike, a label leak, and a segment where the model looks good only because the baseline was weak
+      baseline: a simple rules or linear baseline
+      heavier: a heavier model only if its errors are ones the team can act on
+      drop_rule: drop the heavier model if it does not improve precision at the review capacity the team has
+      assumption: the proxy label is good enough to compare methods, and it is not a confirmed business outcome
+      limitation: public labels are incomplete, so the result is a queue design rather than a deployed model
+      action: a threshold, the error trade-off, and what labeled data would change
+      more_resources: add confirmed labels and re-estimate precision at the same threshold
+      sample_plan: an extract I will count and keep inside the working range
+      cleaning: freeze a train, validation, and test split, and document leakage and class balance
+      skills_sentence: a baseline, precision and recall, and an error analysis

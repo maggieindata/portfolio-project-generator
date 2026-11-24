@@ -1,0 +1,583 @@
+# Public-data shortlist checked 23 Nov 2026 (America/Los_Angeles).
+# Role tags use only the three v1 roles. idea_roles controls default idea generation.
+# suits_roles controls the picker. Avoid rows are never suggested as starters.
+
+groups:
+  - id: catalogs
+    label: Discovery catalogs
+    caption: Use these to find a dataset, then run the size, relevance, showcase, and story checks.
+  - id: gov
+    label: Government and economics
+    caption: Single time series are often under 10k rows. Build a panel or combine indicators.
+  - id: cities
+    label: Cities and transportation
+    caption: City and transportation sources with a clear operational stakeholder.
+  - id: health
+    label: Healthcare
+    caption: Prefer public summaries. Confirm row counts. Some hospital files are small on their own.
+  - id: commerce
+    label: Commerce, experiments, and reviews
+    caption: Sample anything above the 10M-row cap.
+  - id: avoid
+    label: Avoid or dropped
+    caption: Do not start here unless you bring a genuinely new angle. Several of these are out of the v1 shortlist entirely.
+
+sources:
+  - id: data_gov
+    name: Data.gov
+    source_url: https://www.data.gov/
+    domain: Open data
+    group: catalogs
+    typical_rows: Varies by dataset. Confirm the row count on the dataset page.
+    size_rule: unknown
+    suits_roles: [data_analyst, product_data_scientist, algorithm_data_scientist]
+    example_question: What program or city outcome changed, and for whom?
+    notes: U.S. federal open-data catalog. The catalog is not itself a project dataset.
+    idea_ready: false
+    beats:
+      sample_plan: one dataset extract of about 200,000 rows, confirmed on the catalog page before I start
+
+  - id: google_dataset_search
+    name: Google Dataset Search
+    source_url: https://datasetsearch.research.google.com/
+    domain: Open data
+    group: catalogs
+    typical_rows: Varies. Always verify the source page.
+    size_rule: unknown
+    suits_roles: [data_analyst, product_data_scientist, algorithm_data_scientist]
+    example_question: Which less-used dataset fits a target industry?
+    notes: Search index across public dataset pages.
+    idea_ready: false
+    beats:
+      sample_plan: one dataset I verify, about 200,000 rows, sampled down if the source is larger
+
+  - id: aws_open_data
+    name: Registry of Open Data on AWS
+    source_url: https://registry.opendata.aws/
+    domain: Open data
+    group: catalogs
+    typical_rows: Often large. Sample into 10k–10M.
+    size_rule: must_sample
+    suits_roles: [data_analyst, product_data_scientist, algorithm_data_scientist]
+    example_question: What can be analyzed without moving a huge dump?
+    notes: Public datasets hosted on AWS.
+    idea_ready: false
+    beats:
+      sample_plan: a sample of about 500,000 rows, not the full object store
+
+  - id: huggingface
+    name: Hugging Face Datasets
+    source_url: https://huggingface.co/datasets
+    domain: Text and research data
+    group: catalogs
+    typical_rows: Often large. Sample a config or a split.
+    size_rule: must_sample
+    suits_roles: [product_data_scientist, algorithm_data_scientist]
+    example_question: Which public corpus fits a role-specific question?
+    notes: Community and research datasets, including text.
+    idea_ready: false
+    beats:
+      sample_plan: one config or split of about 300,000 rows, not the full corpus
+
+  - id: kaggle
+    name: Kaggle Datasets
+    source_url: https://www.kaggle.com/datasets
+    domain: Public datasets
+    group: catalogs
+    typical_rows: Varies. Skip overused toy sets.
+    size_rule: unknown
+    suits_roles: [data_analyst, product_data_scientist, algorithm_data_scientist]
+    example_question: Can this be upgraded beyond a kernel clone?
+    notes: Prefer a non-tutorial set with a stakeholder.
+    idea_ready: false
+    beats:
+      sample_plan: one non-tutorial extract of about 200,000 rows
+
+  - id: bigquery_public
+    name: BigQuery public datasets
+    source_url: https://docs.cloud.google.com/bigquery/public-data
+    domain: Public warehouses
+    group: catalogs
+    typical_rows: Many tables exceed 10M. Query a slice.
+    size_rule: must_sample
+    suits_roles: [data_analyst, product_data_scientist, algorithm_data_scientist]
+    example_question: What question can be answered from a bounded SQL extract?
+    notes: Queryable public tables. Do not pull an entire large table.
+    idea_ready: false
+    beats:
+      sample_plan: a bounded SQL extract of about 500,000 rows
+
+  - id: data_europa
+    name: data.europa.eu
+    source_url: https://data.europa.eu/
+    domain: European open data
+    group: catalogs
+    typical_rows: Varies. Confirm the row count.
+    size_rule: unknown
+    suits_roles: [data_analyst, product_data_scientist]
+    example_question: How does a policy or market metric differ across countries?
+    notes: EU open-data catalog.
+    idea_ready: false
+    beats:
+      sample_plan: a country panel of about 50,000 rows, built by stacking indicators rather than one short series
+
+  - id: data_gov_uk
+    name: data.gov.uk
+    source_url: https://www.data.gov.uk/
+    domain: U.K. open data
+    group: catalogs
+    typical_rows: Varies. Confirm the row count.
+    size_rule: unknown
+    suits_roles: [data_analyst, product_data_scientist]
+    example_question: What public-service pattern would a stakeholder act on?
+    notes: U.K. open-data catalog.
+    idea_ready: false
+    beats:
+      sample_plan: one service extract of about 200,000 rows, confirmed before I start
+
+  - id: fred
+    name: FRED
+    source_url: https://fred.stlouisfed.org/
+    domain: Economics
+    group: gov
+    typical_rows: A single series is often under 10k. Stack series or places to reach the range.
+    size_rule: too_small
+    suits_roles: [data_analyst, product_data_scientist]
+    example_question: Which labor or price indicators move together, and what decision does that inform?
+    notes: U.S. and international economic time series. Do not treat one chart as a project.
+    idea_ready: false
+    beats:
+      sample_plan: a stacked panel of about 50,000 rows across series and places, because one series is often under 10k
+      stakeholder: an economist or planning lead who has to brief a decision
+      stakes_sentence: A single pretty chart of one series hides whether wages, prices, or employment are actually moving together, and the cost is a bad planning call.
+      action: a short list of indicators that move together and the decision that list should inform
+
+  - id: bls
+    name: BLS
+    source_url: https://www.bls.gov/data/
+    domain: Labor statistics
+    group: gov
+    typical_rows: Same caution as FRED. Combine series rather than charting one.
+    size_rule: too_small
+    suits_roles: [data_analyst, product_data_scientist]
+    example_question: Where is wage or employment pressure showing up for a sector?
+    notes: Employment, prices, and productivity statistics.
+    idea_ready: false
+    beats:
+      sample_plan: a stacked industry-by-month panel of about 40,000 rows, not one national series
+      stakeholder: a workforce or compensation planning lead
+      stakes_sentence: Missing where wage pressure actually sits has a cost for hiring plans and for the people in the squeezed sector.
+      action: a short list of sectors where wage or employment pressure should change a plan
+
+  - id: world_bank
+    name: World Bank Open Data
+    source_url: https://data.worldbank.org/
+    domain: Development
+    group: gov
+    typical_rows: Country-year panels can reach the range when indicators are stacked. One indicator may not.
+    size_rule: unknown
+    suits_roles: [data_analyst, product_data_scientist]
+    example_question: Which development or economic indicators track a policy outcome?
+    notes: DataBank is a working companion at https://databank.worldbank.org/. Automated fetches of the main page were sometimes challenged.
+    idea_ready: false
+    beats:
+      sample_plan: a stacked country-year panel of about 80,000 rows across several indicators
+
+  - id: census
+    name: Census Bureau Data
+    source_url: https://www.census.gov/data
+    domain: Demographics
+    group: gov
+    typical_rows: Varies widely. Extract a bounded table.
+    size_rule: unknown
+    suits_roles: [data_analyst, product_data_scientist]
+    example_question: How do local demographics change a product or public-service question?
+    notes: Demographic, business, and economic survey and census products.
+    idea_ready: false
+    beats:
+      sample_plan: one bounded table of about 150,000 rows for the places the decision covers
+
+  - id: hmda
+    name: HMDA
+    source_url: https://ffiec.cfpb.gov/data-publication/
+    domain: Mortgage lending
+    group: gov
+    typical_rows: Millions of applications per year. Sample a state or a year.
+    size_rule: must_sample
+    suits_roles: [data_analyst, algorithm_data_scientist]
+    idea_roles: [data_analyst, algorithm_data_scientist]
+    idea_rank: 30
+    idea_ready: true
+    project_title: Where mortgage patterns suggest an access or pricing problem
+    example_question: Where do lending patterns suggest a pricing, risk, or access problem?
+    notes: U.S. mortgage loan application records from FFIEC / CFPB.
+    skills: [SQL, pandas, fair-comparison baselines, evaluation design]
+    beats:
+      stakeholder: a lending-policy or fair-lending lead
+      stakes_sentence: Lending patterns that hide an access or pricing problem have a real cost for applicants and for the institution that misses them.
+      alternatives: applicant mix, loan purpose, and geography that a raw denial rate confuses with bias
+      baseline: denial and pricing rates inside a stated peer group
+      heavier: a model only if it changes which segments a reviewer would inspect
+      limitation: HMDA is an application file, not a full underwriting file, so the result is a review list rather than a finding of discrimination
+      action: a short list of segments where access or pricing looks uneven after a fairer comparison
+      sample_plan: one state-year sample of about 400,000 applications, not the full national file
+
+  - id: nyc_open_data
+    name: NYC Open Data
+    source_url: https://www.nyc.gov/opendata
+    domain: City operations
+    group: cities
+    typical_rows: Varies by dataset. Confirm the row count. Catalog at https://data.cityofnewyork.us/browse.
+    size_rule: unknown
+    suits_roles: [data_analyst, product_data_scientist]
+    example_question: What operational issue would a city team change next quarter?
+    notes: Housing, 311, health, and other city datasets.
+    idea_ready: false
+    beats:
+      sample_plan: one city dataset of about 300,000 rows covering a recent period, confirmed before I start
+
+  - id: tlc
+    name: NYC TLC trip records
+    source_url: https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page
+    domain: Transportation
+    group: cities
+    typical_rows: Monthly files are often in the low millions. Use one month or one borough, not every year.
+    size_rule: in_range
+    suits_roles: [data_analyst, product_data_scientist, algorithm_data_scientist]
+    idea_roles: [data_analyst, product_data_scientist, algorithm_data_scientist]
+    idea_rank: 15
+    idea_ready: true
+    project_title: NYC trip demand versus supply
+    example_question: When and where is demand out of balance with supply?
+    notes: Yellow, green, and for-hire trip files.
+    skills: [SQL, pandas, time-series comparison, zone aggregation]
+    beats:
+      stakeholder: a TLC operations lead
+      stakes_sentence: Unreliable peak-hour coverage costs rider trust and wastes driver hours when cars sit in the wrong zones.
+      alternatives: airport hubs, one-off events, and weather the public trip file does not include
+      baseline: a simple time-of-week average of pickups
+      heavier: a zone-hour breakdown a staffing lead can sort
+      limitation: the public file has no driver-level acceptance data, so this cannot support a causal claim about why a zone was empty
+      action: a short list of zone-hour pairs where supply should be added or repositioned next week
+      sample_plan: one month, or one borough if needed, about 1,000,000 rows, not every year of trips
+
+  - id: chicago_inspections
+    name: Chicago food inspections
+    source_url: https://data.cityofchicago.org/Health-Human-Services/Food-Inspections/4ijn-s7e5
+    domain: Public health
+    group: cities
+    typical_rows: Multi-year logs are typically well inside 10k–10M. Confirm the live count.
+    size_rule: in_range
+    suits_roles: [data_analyst, product_data_scientist]
+    idea_roles: [data_analyst]
+    idea_rank: 13
+    idea_ready: true
+    project_title: Repeat food-inspection risk in Chicago
+    example_question: Which establishments or neighborhoods show repeated risk, and what should inspection ops do?
+    notes: City portal dataset. Confirm the live row count before modeling.
+    skills: [SQL, pandas, rate comparisons, stakeholder recommendations]
+    beats:
+      stakeholder: a Chicago food-inspection operations lead
+      stakes_sentence: Repeat inspection failures put diners at risk and waste inspector hours when the route never changes.
+      alternatives: seasonality, a change in who files the report, and neighborhood volume rather than true risk
+      baseline: the establishment's prior fail rate versus the citywide rate
+      heavier: a simple risk score only if it changes the route versus the prior-fail list
+      limitation: inspection records show findings, not the full kitchen context, so the list is a queue for humans
+      action: a short list of establishments or neighborhoods the inspection team should prioritize next quarter
+      sample_plan: a multi-year extract of about 200,000 inspection records, with the live count confirmed on the city portal before modeling
+
+  - id: bts
+    name: BTS TranStats
+    source_url: https://www.transtats.bts.gov/
+    domain: Transportation
+    group: cities
+    typical_rows: A month is often hundreds of thousands of flights. A full year can approach or exceed 10M.
+    size_rule: in_range
+    suits_roles: [data_analyst, algorithm_data_scientist]
+    idea_roles: [data_analyst, algorithm_data_scientist]
+    idea_rank: 14
+    idea_ready: true
+    project_title: Which flight delays an operations team should target
+    example_question: Which routes or carriers drive delay, and what would ops change?
+    notes: U.S. transportation statistics, including on-time flight data. Prefer one month.
+    skills: [SQL, pandas, baselines, delay segmentation]
+    beats:
+      stakeholder: an airline or airport operations lead
+      stakes_sentence: Delay concentrated on a few routes costs passengers time and the carrier money when the schedule does not change.
+      alternatives: weather, a late inbound aircraft, and a carrier's own padding rather than a route problem
+      baseline: a carrier-route on-time rate versus the system average for that hour
+      heavier: a delay model only if it changes which routes the ops team would actually touch
+      limitation: public on-time data does not include the crew and turnaround detail an airline has internally
+      action: a short list of routes or carriers where delay is concentrated, with the hour of day attached
+      sample_plan: one month of flights, about 500,000 rows, not a full year that can exceed the cap
+
+  - id: cms
+    name: CMS Data
+    source_url: https://data.cms.gov/
+    domain: Healthcare
+    group: health
+    typical_rows: Provider and claims-summary files often run from tens of thousands to the low millions. Confirm before starting.
+    size_rule: in_range
+    suits_roles: [data_analyst, algorithm_data_scientist]
+    idea_roles: [data_analyst, algorithm_data_scientist]
+    idea_rank: 40
+    idea_ready: true
+    project_title: Hospital cost and readmissions
+    example_question: Which providers or services are cost or quality outliers, after fair comparisons?
+    notes: Medicare and Medicaid program, provider, and payment datasets. Pair a small hospital file with a larger utilization extract.
+    skills: [SQL, joins, benchmarking, communicating uncertainty]
+    beats:
+      stakeholder: a hospital quality lead
+      stakes_sentence: Uneven readmission and cost outcomes affect CMS payment adjustments and the patients behind those numbers.
+      alternatives: patient mix, hospital size, and service-line differences that raw ranks ignore
+      baseline: a simple peer comparison within bed size and region
+      heavier: a risk-adjusted view only if it changes who the quality team should call
+      limitation: hospital-level readmission files are often under 10k rows on their own, so the work pairs them with a larger CMS extract and does not claim causality
+      action: a short investigation list for the quality team, with the uncertainty written next to each name
+      sample_plan: a CMS provider or payment extract of about 150,000 rows, joined to hospital readmission measures
+
+  - id: hrrp
+    name: Hospital Readmissions Reduction Program
+    source_url: https://catalog.data.gov/dataset/hospital-readmissions-reduction-program
+    domain: Healthcare
+    group: health
+    typical_rows: Hospital-level files may fall under 10k alone. Pair them with a larger CMS utilization file.
+    size_rule: too_small
+    suits_roles: [data_analyst, product_data_scientist]
+    example_question: Where are readmission rates elevated, and what should a hospital quality team investigate?
+    notes: CMS hospital readmission measures and payment-adjustment context.
+    idea_ready: false
+    beats:
+      sample_plan: the hospital file paired with a CMS utilization extract of about 150,000 rows, because the hospital file alone is often under 10k
+      stakeholder: a hospital quality lead
+      stakes_sentence: Payment adjustments and patient returns are the cost of looking at the wrong hospitals.
+      action: a short investigation list for the quality team after a fairer comparison
+
+  - id: cdc
+    name: CDC Open Data
+    source_url: https://data.cdc.gov/
+    domain: Public health
+    group: health
+    typical_rows: Varies widely. Confirm the row count and the grain.
+    size_rule: unknown
+    suits_roles: [data_analyst, product_data_scientist]
+    example_question: What health-outcome pattern would a public-health team act on?
+    notes: Public health surveillance and survey datasets.
+    idea_ready: false
+    beats:
+      sample_plan: one surveillance extract of about 200,000 rows at a stated grain
+
+  - id: openfda
+    name: openFDA
+    source_url: https://open.fda.gov/
+    domain: Drug and device safety
+    group: health
+    typical_rows: Adverse-event extracts can reach millions. Filter a product class or a period.
+    size_rule: must_sample
+    suits_roles: [data_analyst, algorithm_data_scientist]
+    idea_roles: [algorithm_data_scientist]
+    idea_rank: 11
+    idea_ready: true
+    project_title: Which adverse-event signals deserve a review queue
+    example_question: Which safety signals deserve a review queue, versus seasonal noise?
+    notes: FDA public APIs and datasets, including adverse events and recalls.
+    skills: [baselines, precision and recall, anomaly detection, evaluation design]
+    beats:
+      stakeholder: a drug-safety review lead
+      stakes_sentence: A real safety signal that sits in the queue too long can harm patients, and a noisy queue wastes reviewer time.
+      alternatives: seasonality, a reporting-campaign spike, and a product-class relabel
+      baseline: a rate of serious reports versus a trailing window
+      heavier: a detector only if it improves precision at the review capacity the team actually has
+      limitation: adverse-event reports are not confirmed causation, and the full extract can run past 10 million rows
+      action: a review threshold and a short list of product classes that deserve a human look
+      sample_plan: one product class over a bounded period, about 300,000 reports
+
+  - id: olist
+    name: Olist Brazilian E-Commerce
+    source_url: https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
+    domain: Marketplaces
+    group: commerce
+    typical_rows: Order-level data is commonly published at about 100,000 orders, inside the range at the smaller end.
+    size_rule: in_range
+    suits_roles: [data_analyst, product_data_scientist, algorithm_data_scientist]
+    idea_roles: [data_analyst, product_data_scientist, algorithm_data_scientist]
+    idea_rank: 40
+    idea_ready: true
+    project_title: Which marketplace cohorts are worth retaining
+    example_question: Which cohorts are worth retaining, and what drives repeat purchase?
+    notes: Orders, customers, payments, and reviews for a Brazilian marketplace.
+    skills: [cohort analysis, product metrics, SQL, propensity model]
+    beats:
+      stakeholder: a marketplace growth lead
+      stakes_sentence: Untargeted retention spend wastes budget on buyers who would return anyway and misses the cohorts that actually leave.
+      alternatives: a category-mix effect, a one-time discount, and delivery delays that look like disloyalty
+      baseline: cohort retention and a simple value heuristic
+      heavier: a propensity model only if it beats the heuristic on who would be contacted
+      limitation: the public marketplace extract is not a margin picture, so lifetime value here is not profit
+      action: a prioritized retention list and the offer logic a growth lead could test next
+      sample_plan: the published order-level extract, about 100,000 orders
+
+  - id: amazon_reviews
+    name: Amazon Reviews 2023
+    source_url: https://huggingface.co/datasets/McAuley-Lab/Amazon-Reviews-2023
+    domain: Reviews
+    group: commerce
+    typical_rows: The full set is 571.54 million reviews. Sample one category, for example All_Beauty at about 701,000 ratings.
+    size_rule: must_sample
+    suits_roles: [product_data_scientist, algorithm_data_scientist]
+    idea_roles: [product_data_scientist, algorithm_data_scientist]
+    idea_rank: 40
+    idea_ready: true
+    project_title: Review themes that predict low ratings
+    example_question: Which review themes predict low ratings, and what should a catalog team change?
+    notes: McAuley Lab reviews and item metadata. Companion site https://amazon-reviews-2023.github.io/. Do not use the full crawl.
+    skills: [TF-IDF, classification, error analysis, sampling]
+    beats:
+      stakeholder: a catalog or product-quality lead
+      stakes_sentence: The cost is returns and wasted merchandising effort when a catalog team chases star ratings instead of fixable themes.
+      alternatives: a noisy keyword, a category effect, and short reviews that look negative without a fixable issue
+      baseline: a keyword or TF-IDF plus logistic model
+      heavier: a larger text model only if its error types are ones the team can act on
+      limitation: the full crawl is about 571 million reviews, far above 10 million, so the project uses one category only
+      action: a short list of themes to change or watch, plus a refresh of the same comparison
+      sample_plan: the All_Beauty category, about 701,000 ratings, not the full crawl
+
+  - id: criteo
+    name: Criteo Uplift Dataset
+    source_url: https://ailab.criteo.com/criteo-uplift-prediction-dataset/
+    domain: Advertising experiments
+    group: commerce
+    typical_rows: Unbiased release is 13,979,592 rows, just over the cap. Original release is 25,309,483 rows. Sample into 10k–10M.
+    size_rule: must_sample
+    suits_roles: [product_data_scientist, algorithm_data_scientist]
+    idea_roles: [product_data_scientist, algorithm_data_scientist]
+    idea_rank: 12
+    idea_ready: true
+    project_title: Who should still receive this treatment
+    example_question: Did the treatment cause visits or conversions, and who should be targeted?
+    notes: Randomized advertising incrementality data with 11 anonymized features, treatment, visit, and conversion. Do not start from the original 25.3M release.
+    skills: [experimentation, causal inference, uplift, evaluation design]
+    beats:
+      stakeholder: a product or marketing lead
+      stakes_sentence: Spend continues on a treatment whose incremental effect is unclear, so the cost of being wrong is wasted budget or cutting something that works.
+      alternatives: a high baseline conversion rate, uneven treatment assignment, and segments that are hurt rather than helped
+      baseline: the average treatment effect, overall and inside a few coarse segments
+      heavier: an uplift model that tries to rank who benefits
+      limitation: the unbiased release is 13,979,592 rows, just over 10 million, so the project samples down and does not start from the 25 million original dump
+      action: a target, keep, or stop recommendation, with the segments that look unmoved or hurt
+      sample_plan: a sample of about 2,000,000 rows from the Criteo unbiased uplift release
+
+  - id: cfpb
+    name: CFPB Consumer Complaint Database
+    source_url: https://www.consumerfinance.gov/data-research/consumer-complaints/
+    domain: Consumer finance
+    group: commerce
+    typical_rows: Multi-million-row public log. Filter a product or a year into 10k–10M.
+    size_rule: must_sample
+    suits_roles: [data_analyst, algorithm_data_scientist]
+    idea_roles: [data_analyst, algorithm_data_scientist]
+    idea_rank: 40
+    idea_ready: true
+    project_title: Complaint spikes that belong in a human review queue
+    example_question: Which complaint spikes look real, and how should a review team prioritize them?
+    notes: U.S. consumer financial complaints, with a public bulk download.
+    skills: [baselines, anomaly detection, precision and recall, evaluation design]
+    beats:
+      stakeholder: a consumer-risk review lead
+      stakes_sentence: A missed complaint spike can become customer harm, while a noisy detector wastes the review team's hours.
+      alternatives: seasonal volume, a large company's base rate, and a product-category relabel
+      baseline: a seasonal rate rule the review team could run without a model
+      heavier: a detector aimed at precision and recall in the review queue
+      limitation: the public log is multi-million rows and mostly unlabeled, so false alarms and missed harm stay visible
+      action: a queue threshold, a short monitoring plan, and a note on what labeled data would change
+      sample_plan: one product or one year, about 400,000 complaints, filtered from the public log
+
+  - id: yelp
+    name: Yelp Open Dataset
+    source_url: https://business.yelp.com/data/resources/open-dataset/
+    domain: Local businesses
+    group: commerce
+    typical_rows: Publisher figures are 6,990,280 reviews and 150,346 businesses, at the high end of the range. Sample a city or a category if iteration is slow.
+    size_rule: in_range
+    suits_roles: [product_data_scientist, algorithm_data_scientist]
+    idea_roles: [product_data_scientist]
+    idea_rank: 16
+    idea_ready: true
+    project_title: Local review themes that track low ratings
+    example_question: Which review themes or business attributes relate to ratings, and what should an operator change?
+    notes: Educational business, review, and photo dataset. The older yelp.com/dataset URL did not return a usable page. Automated fetches of the official page returned 403 or timed out on 23 Nov 2026. The page is still published. Accept the educational license before you use it.
+    skills: [text baselines, error analysis, product metrics]
+    beats:
+      stakeholder: a local operator or multi-location lead
+      stakes_sentence: Low ratings cost repeat visits when the operator cannot see which themes, not just the stars, are responsible.
+      alternatives: a tourist-versus-local mix, a single bad month, and reviews that complain without a fixable theme
+      baseline: a keyword count of low-star reviews by theme
+      heavier: a text model only if it changes which themes the operator would act on
+      limitation: the educational dataset has license limits, and stars are not a defect label
+      action: a short list of themes an operator should change or watch, tied to locations or categories
+      sample_plan: one city or category, about 1,000,000 reviews, rather than the full 6,990,280-review educational set
+
+  - id: avoid_classics
+    name: Titanic, Iris, Boston Housing
+    source_url: ""
+    domain: Tutorials
+    group: avoid
+    typical_rows: Usually far under 10k rows.
+    size_rule: too_small
+    suits_roles: []
+    avoid: true
+    idea_ready: false
+    counts_as_overused_pitfall: true
+    mention_pattern: '\btitanic\b|\biris\b|boston housing|boston house'
+    generation_note: Titanic, Iris, and Boston Housing were not used. They are tutorial sets and usually under 10k rows. State a genuinely new angle if you still want them considered.
+    example_question: No hire-worthy business question without a new, specific angle.
+    notes: Flag in every role. Do not recommend them as a starting point.
+
+  - id: avoid_telco
+    name: IBM Telco customer churn
+    source_url: ""
+    domain: Tutorials
+    group: avoid
+    typical_rows: About 7k rows, under the size bar.
+    size_rule: too_small
+    suits_roles: []
+    avoid: true
+    idea_ready: false
+    counts_as_overused_pitfall: true
+    mention_pattern: 'ibm telco|telco customer churn'
+    generation_note: IBM Telco customer churn is about 7k rows and overused. Prefer Olist repurchase or a larger product log.
+    example_question: Prefer a larger product log with a real retention decision.
+    notes: Do not recommend.
+
+  - id: avoid_fraud
+    name: Credit-card fraud tutorial sets
+    source_url: ""
+    domain: Tutorials
+    group: avoid
+    typical_rows: Some are in range, but the project shape is overused.
+    size_rule: unknown
+    suits_roles: []
+    avoid: true
+    idea_ready: false
+    counts_as_overused_pitfall: true
+    mention_pattern: 'credit card fraud|credit-card fraud'
+    generation_note: Credit-card fraud tutorial sets were not used. Prefer CFPB, openFDA, or CMS with a review-queue story unless you have a new angle.
+    example_question: Prefer a review queue on CFPB, openFDA, or CMS.
+    notes: Do not recommend unless the user brings a genuinely new angle.
+
+  - id: avoid_instacart
+    name: Official Instacart market basket set
+    source_url: ""
+    domain: E-commerce
+    group: avoid
+    typical_rows: Not a current official source for v1.
+    size_rule: unknown
+    suits_roles: []
+    avoid: true
+    idea_ready: false
+    counts_as_overused_pitfall: false
+    mention_pattern: '\binstacart\b'
+    generation_note: The official Instacart market-basket set was dropped. The original URL returned 404 on 23 Nov 2026. Use Olist for e-commerce.
+    flag_message: The official Instacart set was dropped from the v1 shortlist after the original URL 404'd. Use Olist for an e-commerce project.
+    example_question: Use Olist for e-commerce instead.
+    notes: Dropped from the shortlist. The older Instacart download page is gone.

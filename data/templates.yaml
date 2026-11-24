@@ -1,0 +1,234 @@
+# Six SPIDER templates, two per v1 role. Prompts are prefilled as questions, not a finished analysis.
+# Dataset facts live on the matching source in sources.yaml.
+
+templates:
+  - id: tlc_demand
+    label: TLC demand
+    role: data_analyst
+    dataset_id: tlc
+    title: Peak-hour TLC coverage
+    criteria_to_emphasize:
+      - Industry relevance
+      - Depth of analysis
+      - Thought process & reasoning
+      - Implementation & planning
+    pitfalls_to_avoid: Visualization-only heatmaps, no decision owner, pulling all years and blowing past 10M rows.
+    skills:
+      - SQL
+      - pandas
+      - time-series EDA
+      - zone aggregation
+      - stakeholder recommendations
+    prompts:
+      summary_impact: |
+        Write a 3–5 sentence pitch: the ops problem, the action, the TLC data used, the method, and the decision the brief should enable.
+      problem_space: |
+        Name the stakeholder (ops lead, city agency, or marketplace). Why unreliable coverage matters, and what is at stake for cost, reliability, or revenue.
+      investigation_insights: |
+        Which demand patterns are worth investigating (time of week, zones, weather or events), and what would explain them?
+      data: |
+        Use NYC TLC trip records for one month or one borough so the extract stays in 10k–10M rows. Cover cleaning, time zones, outliers, and zone joins. Source: https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page
+      execution: |
+        Start with descriptive and diagnostic analysis. Compare a simple time-of-week baseline with a heavier forecast, and say what you would try and drop.
+      results_recommendations: |
+        Recommend when and where to add or reposition supply. State what you would do with more resources (weather, events, or a longer window).
+      act1: |
+        Act 1: Peak-hour coverage is unreliable, with cost and rider-trust stakes.
+      act2: |
+        Act 2: Simple averages fail; a time-and-zone view works better.
+      act3: |
+        Act 3: A staffing or positioning recommendation, with caveats.
+      three_act: |
+        Act 1: Peak-hour coverage is unreliable, with cost and rider-trust stakes. Act 2: Simple averages fail; a time-and-zone view works better. Act 3: A staffing or positioning recommendation, with caveats.
+
+  - id: medicare
+    label: Medicare cost
+    role: data_analyst
+    dataset_id: cms
+    title: Hospital cost and readmissions
+    criteria_to_emphasize:
+      - Industry relevance
+      - Depth of analysis
+      - Handling ambiguity
+      - Ability to defend in interviews
+    pitfalls_to_avoid: No business context, overclaiming causality, relying on a tiny hospital-only file that fails the size check.
+    skills:
+      - joins
+      - descriptive benchmarking
+      - communicating uncertainty
+      - healthcare domain context
+    prompts:
+      summary_impact: |
+        Pitch a hospital quality or cost project: context, comparison method, CMS data, and the decision it should inform.
+      problem_space: |
+        Stakeholder is a hospital ops or quality lead, or a policy analyst. Stakes include CMS payment adjustments and patient outcomes.
+      investigation_insights: |
+        What drives variation in cost or readmissions after a fair comparison? Which alternative explanations must be checked?
+      data: |
+        Start from https://data.cms.gov/ and the Hospital Readmissions Reduction Program page https://catalog.data.gov/dataset/hospital-readmissions-reduction-program. Hospital-level files may be under 10k alone; pair with a larger CMS utilization or payment-summary file and confirm row counts.
+      execution: |
+        Benchmark first. Be explicit about risk adjustment and why a causal claim may not be warranted. Document trade-offs between simple comparisons and heavier models.
+      results_recommendations: |
+        Name the facilities or service lines to investigate, the limitation of the public data, and what better data would change.
+      act1: |
+        Act 1: Uneven cost or readmission outcomes have payment and patient stakes.
+      act2: |
+        Act 2: Raw ranks mislead; a fairer comparison changes the list.
+      act3: |
+        Act 3: A short investigation list for the quality team, with uncertainty stated.
+      three_act: |
+        Act 1: Uneven cost or readmission outcomes have payment and patient stakes. Act 2: Raw ranks mislead; a fairer comparison changes the list. Act 3: A short investigation list for the quality team, with uncertainty stated.
+
+  - id: criteo_uplift
+    label: Criteo uplift
+    role: product_data_scientist
+    dataset_id: criteo
+    title: Did the treatment work, and for whom should we keep it?
+    criteria_to_emphasize:
+      - Thought process & reasoning
+      - Understanding trade-offs
+      - Ability to defend in interviews
+      - Industry relevance
+      - Handling ambiguity
+    pitfalls_to_avoid: A t-test-only tutorial with no product decision, ignoring heterogeneity, or using the full 25M dump.
+    skills:
+      - experiment design
+      - causal inference
+      - uplift modeling
+      - product decision-making
+    prompts:
+      summary_impact: |
+        Pitch an incrementality project, not a raw conversion-rate chart: the product question, the randomized treatment, the method, and the ship-or-stop decision.
+      problem_space: |
+        Stakeholder is a product or marketing lead deciding whether to keep, cut, or retarget a treatment. Name the cost of being wrong.
+      investigation_insights: |
+        Where is the average treatment effect hiding heterogeneity? Which segments are helped, unmoved, or possibly hurt?
+      data: |
+        Use the Criteo unbiased uplift dataset (13,979,592 rows, 11 anonymized features, treatment, visit, conversion) from https://ailab.criteo.com/criteo-uplift-prediction-dataset/. Sample down into 10k–10M rows. Do not start from the 25.3M original release.
+      execution: |
+        Compare a simple average treatment effect with an uplift model. Call out leakage, the treatment ratio, and the speed-versus-accuracy trade-off.
+      results_recommendations: |
+        Recommend who to target, whether to scale the treatment, and what a better experiment would collect next.
+      act1: |
+        Act 1: Spend continues without a clear incremental-effect story.
+      act2: |
+        Act 2: Overall lift is not the whole story; segments differ, and a naive model overfits.
+      act3: |
+        Act 3: A targeting or stop-ship recommendation, with uncertainty.
+      three_act: |
+        Act 1: Spend continues without a clear incremental-effect story. Act 2: Overall lift is not the whole story; segments differ, and a naive model overfits. Act 3: A targeting or stop-ship recommendation, with uncertainty.
+
+  - id: olist_ltv
+    label: Olist LTV
+    role: product_data_scientist
+    dataset_id: olist
+    title: Which Olist cohorts are worth retaining?
+    criteria_to_emphasize:
+      - Industry relevance
+      - Depth of analysis
+      - Understanding trade-offs
+      - Independent work capability
+    pitfalls_to_avoid: A generic telco-churn tutorial, the IBM Telco set (too small and overused), or no stakeholder decision.
+    skills:
+      - cohort analysis
+      - LTV
+      - product metrics
+      - propensity model
+    prompts:
+      summary_impact: |
+        Pitch a retention or LTV project: the growth problem, the customer data, the method, and the action a product team could take.
+      problem_space: |
+        Stakeholder is a product or growth lead at a marketplace. Stakes are wasted retention spend versus missed repeat buyers.
+      investigation_insights: |
+        Which cohort, category, or delivery experiences explain repeat purchase and LTV, and why?
+      data: |
+        Use Olist Brazilian E-Commerce on Kaggle: https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce. Order-level data is commonly published at about 100k orders, in range at the smaller end. Cover cleaning, joins across orders, payments, and reviews.
+      execution: |
+        Start with cohort LTV and simple heuristics, then decide whether a propensity or churn model adds enough value to justify the complexity.
+      results_recommendations: |
+        Recommend whom to retain, with what offer logic, and what you would measure in a follow-up experiment.
+      act1: |
+        Act 1: Retention spend is untargeted.
+      act2: |
+        Act 2: Average LTV hides cohort differences; a simple rule may beat a first model.
+      act3: |
+        Act 3: A prioritized retention action and a test plan.
+      three_act: |
+        Act 1: Retention spend is untargeted. Act 2: Average LTV hides cohort differences; a simple rule may beat a first model. Act 3: A prioritized retention action and a test plan.
+
+  - id: cfpb_anomaly
+    label: CFPB anomalies
+    role: algorithm_data_scientist
+    dataset_id: cfpb
+    title: Complaint-spike detection
+    criteria_to_emphasize:
+      - Understanding trade-offs
+      - Thought process & reasoning
+      - Implementation & planning
+      - Handling ambiguity
+    pitfalls_to_avoid: A credit-card fraud leaderboard clone, visualization-only dashboards, or no reviewer workflow.
+    skills:
+      - anomaly detection
+      - class imbalance
+      - evaluation design
+      - precision and recall
+    prompts:
+      summary_impact: |
+        Pitch an anomaly or risk-detection project: the review-queue problem, the CFPB data, the method, and how performance will be judged.
+      problem_space: |
+        Stakeholder is a risk or consumer-ops lead. The cost of missed spikes is regulatory and customer harm; the cost of false alarms is wasted review time.
+      investigation_insights: |
+        What separates a real emerging issue from seasonal or company-size effects? Which features or text signals matter?
+      data: |
+        Use the CFPB Consumer Complaint Database: https://www.consumerfinance.gov/data-research/consumer-complaints/. The public log is multi-million rows; filter a product or year into 10k–10M. Cover labeling limits and data leakage.
+      execution: |
+        Compare a seasonal or rules baseline with an unsupervised or supervised detector. Optimize for precision-recall in a review queue, not a leaderboard score, and record what failed.
+      results_recommendations: |
+        Recommend a queue threshold, a monitoring plan, and what labeled data would change.
+      act1: |
+        Act 1: Teams see complaints too late.
+      act2: |
+        Act 2: A naive detector is noisy; a baseline plus a tighter model earns its place.
+      act3: |
+        Act 3: A review-queue design and the limits of unlabeled data.
+      three_act: |
+        Act 1: Teams see complaints too late. Act 2: A naive detector is noisy; a baseline plus a tighter model earns its place. Act 3: A review-queue design and the limits of unlabeled data.
+
+  - id: review_nlp
+    label: Review NLP
+    role: algorithm_data_scientist
+    dataset_id: amazon_reviews
+    title: Review themes that predict low ratings
+    criteria_to_emphasize:
+      - Understanding trade-offs
+      - Thought process & reasoning
+      - Implementation & planning
+      - Ability to defend in interviews
+    pitfalls_to_avoid: A sentiment-analysis tutorial clone, using the full reviews crawl, or no product action.
+    skills:
+      - NLP
+      - classification
+      - error analysis
+      - sampling
+      - TF-IDF
+    prompts:
+      summary_impact: |
+        Pitch an NLP project with a product action: the quality problem, the review corpus, the method, and the expected decision.
+      problem_space: |
+        Stakeholder is a product quality or catalog team. Stakes are returns, poor ratings, and wasted assortment or merchandising effort.
+      investigation_insights: |
+        Which themes, not just polarity, relate to low ratings or unhelpful reviews? What would falsify a theme?
+      data: |
+        Sample one category from Amazon Reviews 2023, https://huggingface.co/datasets/McAuley-Lab/Amazon-Reviews-2023, for example All_Beauty at about 701k ratings. Do not use the full 571.54M-review crawl. Yelp Open Dataset is an alternative if the user accepts its educational license: https://business.yelp.com/data/resources/open-dataset/
+      execution: |
+        Start with a keyword or TF-IDF + logistic baseline before a heavier model. Compare speed, accuracy, and error types, and keep a clear train, validation, and test story.
+      results_recommendations: |
+        Name the themes to act on, a monitoring plan, and what better labels or metadata would change.
+      act1: |
+        Act 1: Star ratings hide actionable quality issues.
+      act2: |
+        Act 2: A simple baseline catches obvious sentiment; error analysis justifies or rejects a heavier model.
+      act3: |
+        Act 3: A short list of themes and a way to watch them over time.
+      three_act: |
+        Act 1: Star ratings hide actionable quality issues. Act 2: A simple baseline catches obvious sentiment; error analysis justifies or rejects a heavier model. Act 3: A short list of themes and a way to watch them over time.
